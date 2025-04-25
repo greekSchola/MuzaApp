@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MuzaBot – O-Level Helper</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f2f2f2; }
+        .container { background: white; padding: 20px; border-radius: 10px; max-width: 700px; margin: auto; }
+        textarea, input[type="text"] {
+            width: 100%; padding: 10px; margin-top: 10px;
+            border-radius: 6px; border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 10px; padding: 10px 20px;
+            background-color: #5c67f2; color: white;
+            border: none; border-radius: 6px;
+            cursor: pointer;
+        }
+        .response {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eef;
+            border-left: 5px solid #5c67f2;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ask Mr Muza</h1>
+        <form method="post">
+            <label>Type your question:</label>
+            <textarea name="message" rows="4" placeholder="E.g., What were the causes of the Mfecane?"></textarea>
+            <button type="submit">Ask Muza</button>
+        </form>
+        {% if response %}
+            <div class="response">
+                {{ response|safe }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
