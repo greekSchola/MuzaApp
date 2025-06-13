@@ -2,7 +2,6 @@ from flask import Flask, render_template, request
 import google.generativeai as genai
 import os
 
-
 app = Flask(__name__)
 
 # Configure your Gemini API key
@@ -16,10 +15,11 @@ chat = model.start_chat()
 @app.route("/", methods=["GET", "POST"])
 def index():
     response_text = ""
+    
     if request.method == "POST":
         user_input = request.form["message"]
 
-        # Modified prompt to encourage better formatting
+        # Prompt to encourage structured output
         prompt = f"""
 Please answer the following question clearly and professionally:
 
@@ -34,8 +34,14 @@ Please answer the following question clearly and professionally:
         response = chat.send_message(prompt)
         response_text = response.text
 
+        # Clean up unwanted Markdown blocks
+        if response_text.startswith("```html"):
+            response_text = response_text.replace("```html", "").replace("```", "")
+        elif response_text.startswith("```"):
+            response_text = response_text.replace("```", "")
+
     return render_template("index.html", response=response_text)
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Use PORT env variable or default 5000
+    port = int(os.environ.get("PORT", 5000))  # Use environment PORT or default to 5000
     app.run(host="0.0.0.0", port=port)

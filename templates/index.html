@@ -1,42 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>MuzaBot – O-Level Helper</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; background: #f2f2f2; }
-        .container { background: white; padding: 20px; border-radius: 10px; max-width: 700px; margin: auto; }
-        textarea, input[type="text"] {
-            width: 100%; padding: 10px; margin-top: 10px;
-            border-radius: 6px; border: 1px solid #ccc;
-        }
-        button {
-            margin-top: 10px; padding: 10px 20px;
-            background-color: #5c67f2; color: white;
-            border: none; border-radius: 6px;
-            cursor: pointer;
-        }
-        .response {
-            margin-top: 20px;
-            padding: 15px;
-            background: #eef;
-            border-left: 5px solid #5c67f2;
-            border-radius: 5px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>MuzaBot – O-Level Helper</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0d1a2b;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #1f2e45;
+      padding: 30px;
+      border-radius: 16px;
+      max-width: 800px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      border: 1px solid #2d3e5f;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ffcc00;
+      margin-bottom: 25px;
+      font-size: 2em;
+    }
+
+    label {
+      font-weight: bold;
+      color: #ffffffcc;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 15px;
+      background: #102132;
+      color: #fff;
+      border: 1px solid #34475e;
+      border-radius: 8px;
+      font-size: 1em;
+      resize: vertical;
+      margin-top: 8px;
+    }
+
+    button {
+      background-color: #ff2e63;
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 1em;
+      margin-top: 15px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #e02457;
+    }
+
+    .response {
+      margin-top: 30px;
+      padding: 20px;
+      background: #0e2238;
+      border-left: 6px solid #ffcc00;
+      border-radius: 10px;
+      color: #f2f2f2;
+      font-size: 1.05em;
+      line-height: 1.6;
+    }
+
+    ::placeholder {
+      color: #cccccc;
+      font-style: italic;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Ask Mr Muza</h1>
-        <form method="post">
-            <label>Type your question:</label>
-            <textarea name="message" rows="4" placeholder="E.g., What were the causes of the Mfecane?"></textarea>
-            <button type="submit">Ask Mr Muza</button>
-        </form>
-        {% if response %}
-            <div class="response">
-                {{ response|safe }}
-            </div>
-        {% endif %}
-    </div>
+  <div class="container">
+    <h1>Ask Mr Muza</h1>
+    <form method="post">
+      <label for="message">Type your question:</label>
+      <textarea name="message" id="message" rows="4" placeholder="E.g., What were the causes of the Mfecane?"></textarea>
+      <button type="submit">Ask Mr Muza</button>
+    </form>
+
+    {% if response %}
+      <div class="response">
+        {{ response|safe }}
+      </div>
+    {% endif %}
+  </div>
 </body>
 </html>
