@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 import google.generativeai as genai
+import os
+
 
 app = Flask(__name__)
 
@@ -35,4 +37,5 @@ Please answer the following question clearly and professionally:
     return render_template("index.html", response=response_text)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Use PORT env variable or default 5000
+    app.run(host="0.0.0.0", port=port)
