@@ -43,11 +43,20 @@ def clean_response(text):
     text = re.sub(r"(Let me know.*|Hope this helps.*|I'm here if you need.*)$", "", text, flags=re.IGNORECASE).strip()
     return text
 
-import pdfkit
+from fpdf import FPDF
 
-def generate_pdf(html_text, output_path):
-    config = pdfkit.configuration(wkhtmltopdf=r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe")
-    pdfkit.from_string(html_text, output_path, configuration=config)
+def generate_pdf(text_content, output_path):
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+
+    # Split long text into lines to avoid overflowing the page
+    for line in text_content.split("\n"):
+        pdf.multi_cell(0, 10, line)
+
+    pdf.output(output_path)
+
 
 # Routes
 @app.route("/", methods=["GET", "POST"])
