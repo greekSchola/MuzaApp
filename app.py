@@ -1,10 +1,9 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request
 import google.generativeai as genai
 import os
 import langdetect
 import re
 import fitz  # PyMuPDF for PDF text extraction
-import pdfkit
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -12,12 +11,10 @@ app = Flask(__name__)
 # Configuration
 API_KEY = "AIzaSyA_84rmTgnFdvzjpFdB8p3xYoziCVbcEic"
 UPLOAD_FOLDER = "uploads"
-DOWNLOAD_FOLDER = "downloads"
 ALLOWED_EXTENSIONS = {"pdf", "txt"}
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
 # Gemini setup
 genai.configure(api_key=API_KEY)
@@ -43,21 +40,6 @@ def clean_response(text):
     text = re.sub(r"(Let me know.*|Hope this helps.*|I'm here if you need.*)$", "", text, flags=re.IGNORECASE).strip()
     return text
 
-from fpdf import FPDF
-
-def generate_pdf(text_content, output_path):
-    pdf = FPDF()
-    pdf.set_auto_page_break(auto=True, margin=15)
-    pdf.add_page()
-    pdf.set_font("Arial", size=12)
-
-    # Split long text into lines to avoid overflowing the page
-    for line in text_content.split("\n"):
-        pdf.multi_cell(0, 10, line)
-
-    pdf.output(output_path)
-
-
 # Routes
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -68,7 +50,6 @@ def index():
         user_input = request.form.get("message", "").strip()
         mode = request.form.get("mode", "general")
 
-        # Handle uploaded file
         file = request.files.get("document")
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
@@ -124,13 +105,6 @@ Please write a friendly, helpful answer to this:
         response_text = "<h2>Kumba AI created by Tawanda Muzangazi</h2><p>Welcome! Ask me anything or choose a tool from the menu.</p>"
 
     return render_template("index.html", response=response_text)
-
-@app.route("/download", methods=["POST"])
-def download():
-    html_content = request.form.get("html", "")
-    output_path = os.path.join(DOWNLOAD_FOLDER, "response.pdf")
-    generate_pdf(html_content, output_path)
-    return send_file(output_path, as_attachment=True)
 
 # Run app
 if __name__ == "__main__":

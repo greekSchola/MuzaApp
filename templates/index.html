@@ -44,12 +44,7 @@
             {{ response|safe }}
         </div>
 
-        <!-- PDF Download Form -->
-        <form action="/download" method="post" class="mt-4">
-            <!-- Pass raw HTML content via hidden textarea -->
-            <textarea name="html" class="hidden">{{ response|safe }}</textarea>
-            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Download as PDF</button>
-        </form>
+       
         {% endif %}
     </div>
 </body>
