@@ -4,7 +4,7 @@ import os
 import langdetect
 import re
 import fitz  # PyMuPDF for PDF text extraction
-from xhtml2pdf import pisa
+import pdfkit
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -43,9 +43,11 @@ def clean_response(text):
     text = re.sub(r"(Let me know.*|Hope this helps.*|I'm here if you need.*)$", "", text, flags=re.IGNORECASE).strip()
     return text
 
+import pdfkit
+
 def generate_pdf(html_text, output_path):
-    with open(output_path, "w+b") as f:
-        pisa.CreatePDF(html_text, dest=f)
+    config = pdfkit.configuration(wkhtmltopdf=r"C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe")
+    pdfkit.from_string(html_text, output_path, configuration=config)
 
 # Routes
 @app.route("/", methods=["GET", "POST"])
