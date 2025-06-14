@@ -1,194 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Kumba AI – Your Everyday Companion</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        :root {
-            --primary: #00205B;
-            --accent: #DA291C;
-            --silver: #C0C0C0;
-            --bg: #f4f4f4;
-            --white: #ffffff;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        html, body {
-            width: 100%;
-            margin: 0;
-            overflow-x: hidden;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg);
-        }
-
-        body {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 220px;
-            background-color: var(--primary);
-            color: var(--white);
-            display: flex;
-            flex-direction: column;
-            padding: 20px 10px;
-        }
-
-        .sidebar h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 20px;
-            color: var(--silver);
-        }
-
-        .nav-link {
-            background: none;
-            border: none;
-            color: var(--white);
-            text-align: left;
-            padding: 10px 15px;
-            margin: 5px 0;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-            text-decoration: none;
-            display: block;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            background-color: var(--accent);
-        }
-
-        .content {
-            flex: 1;
-            padding: 20px;
-            max-width: 900px;
-            margin: auto;
-            background-color: var(--white);
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        textarea {
-            width: 100%;
-            padding: 12px;
-            font-size: 15px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            resize: vertical;
-            margin-top: 10px;
-        }
-
-        button[type="submit"] {
-            background-color: var(--primary);
-            color: var(--white);
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-
-        .response {
-            margin-top: 25px;
-            padding: 20px;
-            background: #eef1ff;
-            border-left: 6px solid var(--primary);
-            border-radius: 8px;
-            overflow-wrap: break-word;
-        }
-
-        .response h2, .response h3 {
-            color: var(--primary);
-            margin-top: 20px;
-        }
-
-        .response ul {
-            padding-left: 20px;
-            margin-bottom: 15px;
-        }
-
-        .response li {
-            margin-bottom: 8px;
-        }
-
-        .response p {
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        @media screen and (max-width: 768px) {
-            body {
-                flex-direction: column;
-                margin: 0;
-                overflow-x: hidden;
-            }
-
-            .sidebar {
-                width: 100%;
-                flex-direction: row;
-                overflow-x: auto;
-                padding: 10px;
-            }
-
-            .sidebar h2 {
-                display: none;
-            }
-
-            .nav-link {
-                flex: 1;
-                font-size: 14px;
-                padding: 10px;
-                text-align: center;
-                white-space: nowrap;
-            }
-
-            .content {
-                width: 100%;
-                border-radius: 0;
-                box-shadow: none;
-                padding: 15px;
-                max-width: 100vw;
-            }
-
-            textarea {
-                width: 100%;
-            }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <!-- Sidebar Navigation -->
-    <form class="sidebar" method="post">
-        <h2>Kumba AI</h2>
-        <input type="hidden" name="message" id="autoMessage" value="">
-        <button class="nav-link" name="mode" value="general">General Chat</button>
-        <a class="nav-link" href="https://www.aljazeera.com/where/zimbabwe/" target="_blank">News</a>
-        <a class="nav-link" href="https://jobfinders24.co.za/" target="_blank">Jobs</a>
-        <button class="nav-link" name="mode" value="study">Study Helper</button>
-        <a class="nav-link" href="https://www.newsnow.co.uk/h/World+News/Africa/Zimbabwe" target="_blank">Trending stories</a>
+<body class="min-h-screen flex flex-col md:flex-row font-sans bg-gray-100">
+
+    <!-- Sidebar -->
+    <form method="post" class="bg-blue-900 text-white w-full md:w-56 p-4 space-y-3">
+        <h2 class="text-center text-gray-300 text-lg font-bold mb-4">Kumba AI</h2>
+
+        <input type="hidden" name="message" id="autoMessage" value="" />
+        <button class="w-full py-2 px-3 rounded hover:bg-red-600 bg-blue-800 text-left" name="mode" value="general">General Chat</button>
+        <a href="https://www.aljazeera.com/where/zimbabwe/" target="_blank" class="block w-full py-2 px-3 rounded hover:bg-red-600">News</a>
+        <a href="https://jobfinders24.co.za/" target="_blank" class="block w-full py-2 px-3 rounded hover:bg-red-600">Jobs</a>
+        <button class="w-full py-2 px-3 rounded hover:bg-red-600 bg-blue-800 text-left" name="mode" value="study">Study Helper</button>
+        <a href="https://www.newsnow.co.uk/h/World+News/Africa/Zimbabwe" target="_blank" class="block w-full py-2 px-3 rounded hover:bg-red-600">Trending Stories</a>
     </form>
 
     <!-- Main Content -->
-    <div class="content">
-        <h2>Ask Kumba AI</h2>
-        <form method="post">
-            <label for="message">Type your request:</label>
-            <textarea name="message" rows="4" placeholder="write here , add language eg Shona or ndebele if you do not want English..."></textarea>
-            <button type="submit">Send</button>
-            <input type="hidden" name="mode" value="general">
+    <div class="flex-1 max-w-3xl mx-auto p-6 bg-white shadow-lg mt-4 md:mt-0 md:rounded-lg">
+        <h2 class="text-2xl font-semibold text-blue-900 mb-4">Ask Kumba AI</h2>
+
+        <!-- Main Form -->
+        <form method="post" enctype="multipart/form-data" class="space-y-4">
+            <label for="message" class="block font-medium">Type your request:</label>
+            <textarea name="message" rows="4" class="w-full p-3 border border-gray-300 rounded-lg resize-y" placeholder="Write here... You can add Shona or Ndebele to change language."></textarea>
+            
+            <div>
+                <label class="block font-medium mb-1">Attach document (PDF or TXT):</label>
+                <input type="file" name="document" accept=".pdf,.txt" class="block w-full border border-gray-300 rounded-lg p-2" />
+            </div>
+
+            <input type="hidden" name="mode" value="general" />
+            <button type="submit" class="bg-blue-900 text-white px-5 py-2 rounded hover:bg-blue-700">Send</button>
         </form>
 
         {% if response %}
-        <div class="response">
+        <!-- Response Area -->
+        <div class="mt-6 bg-blue-50 border-l-4 border-blue-900 p-4 rounded-lg">
             {{ response|safe }}
         </div>
+
+        <!-- PDF Download Form -->
+        <form action="/download" method="post" class="mt-4">
+            <!-- Pass raw HTML content via hidden textarea -->
+            <textarea name="html" class="hidden">{{ response|safe }}</textarea>
+            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Download as PDF</button>
+        </form>
         {% endif %}
     </div>
 </body>
