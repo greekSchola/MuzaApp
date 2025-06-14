@@ -1,2 +1,102 @@
-Flask
-google-generativeai
+from flask import Flask, render_template, request
+import google.generativeai as genai
+import os
+from langdetect import detect, DetectorFactory
+
+app = Flask(__name__)
+
+# Set consistent results for langdetect
+DetectorFactory.seed = 0
+
+# Configure your Gemini API key
+API_KEY = "AIzaSyA_84rmTgnFdvzjpFdB8p3xYoziCVbcEic"
+genai.configure(api_key=API_KEY)
+
+# Initialize Gemini model
+model = genai.GenerativeModel("gemini-2.0-flash")
+chat = model.start_chat()
+
+def detect_language(text):
+    try:
+        lang = detect(text)
+
+        # Basic keyword recognition for Shona and Ndebele
+        shona_keywords = ["nyaya", "kumusha", "ndibatsirei", "chikoro", "mwana", "zvinhu"]
+        ndebele_keywords = ["ngiyacela", "ungangitshela", "ikhaya", "isifundo", "baba", "umama"]
+
+        lower_text = text.lower()
+        if any(word in lower_text for word in shona_keywords):
+            return "sn"  # Shona
+        elif any(word in lower_text for word in ndebele_keywords):
+            return "nr"  # Ndebele
+
+        return lang
+    except:
+        return "en"
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    response_text = ""
+    if request.method == "POST":
+        user_input = request.form["message"]
+        mode = request.form.get("mode", "general")
+
+        # Detect input language
+        detected_lang = detect_language(user_input)
+
+        # Add language-specific instruction
+        if detected_lang not in ["en", "sw", "fr"]:
+            language_instruction = "\nPlease respond in the same language as the question."
+        elif detected_lang != "en":
+            language_instruction = f"\nPlease respond in {detected_lang}."
+        else:
+            language_instruction = ""
+
+        # Generate prompt based on mode
+        if mode == "study":
+            prompt = f"""
+Please answer the following question clearly and professionally:
+
+**{user_input}**
+
+- Use headings and bullet points
+- Highlight important concepts in bold
+- If it's a history topic, include examples and short study tips
+- Format the response as HTML so it displays well on a web page
+- Use a bold heading for each country or topic
+- Use <ul> and <li> for bullet points
+- Keep spacing clean and readable
+- Do NOT wrap the entire thing in triple backticks
+- Return only valid HTML to be rendered inside a webpage
+{language_instruction}
+"""
+        elif mode == "news":
+            prompt = f"Summarize trending Zimbabwean news stories in bullet points.{language_instruction}"
+        elif mode == "jobs":
+            prompt = f"List currently available jobs in Zimbabwe. Provide a brief title, location, and summary for each.{language_instruction}"
+        elif mode == "motivation":
+            prompt = f"Give an uplifting motivational quote and a short study tip.{language_instruction}"
+        elif mode == "fun":
+            prompt = f"Tell a clean, funny joke or riddle.{language_instruction}"
+        elif mode == "planner":
+            prompt = f"Suggest a study or productivity plan based on this request: {user_input}.{language_instruction}"
+        elif mode == "story":
+            prompt = f"Write a powerful, emotional story in this language. Make it inspiring or touching: {user_input}{language_instruction}"
+        else:
+            prompt = f"{user_input}{language_instruction}"
+
+        # Get response from Gemini
+        response = chat.send_message(prompt)
+        response_text = response.text.strip()
+
+        # Clean Gemini's output (remove code tags)
+        if response_text.startswith("```html"):
+            response_text = response_text.replace("```html", "").replace("```", "")
+        elif response_text.startswith("```"):
+            response_text = response_text.replace("```", "")
+
+    return render_template("index.html", response=response_text)
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

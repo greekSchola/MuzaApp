@@ -1,102 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>MuzaBot – O-Level Helper</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0d1a2b;
-      color: #ffffff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-    }
+    <meta charset="UTF-8">
+    <title>Kumba AI – Your Everyday Companion</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary: #00205B;
+            --accent: #DA291C;
+            --silver: #C0C0C0;
+            --bg: #f4f4f4;
+            --white: #ffffff;
+        }
 
-    .container {
-      background: #1f2e45;
-      padding: 30px;
-      border-radius: 16px;
-      max-width: 800px;
-      width: 90%;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-      border: 1px solid #2d3e5f;
-    }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            min-height: 100vh;
+        }
 
-    h1 {
-      text-align: center;
-      color: #ffcc00;
-      margin-bottom: 25px;
-      font-size: 2em;
-    }
+        .sidebar {
+            width: 220px;
+            background-color: var(--primary);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 10px;
+        }
 
-    label {
-      font-weight: bold;
-      color: #ffffffcc;
-    }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+            color: var(--silver);
+        }
 
-    textarea {
-      width: 100%;
-      padding: 15px;
-      background: #102132;
-      color: #fff;
-      border: 1px solid #34475e;
-      border-radius: 8px;
-      font-size: 1em;
-      resize: vertical;
-      margin-top: 8px;
-    }
+        .nav-link {
+            background: none;
+            border: none;
+            color: var(--white);
+            text-align: left;
+            padding: 10px 15px;
+            margin: 5px 0;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
 
-    button {
-      background-color: #ff2e63;
-      color: #fff;
-      border: none;
-      padding: 12px 25px;
-      border-radius: 8px;
-      font-size: 1em;
-      margin-top: 15px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      width: 100%;
-    }
+        .nav-link:hover,
+        .nav-link.active {
+            background-color: var(--accent);
+        }
 
-    button:hover {
-      background-color: #e02457;
-    }
+        .content {
+            flex: 1;
+            padding: 20px;
+            max-width: 900px;
+            margin: auto;
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
 
-    .response {
-      margin-top: 30px;
-      padding: 20px;
-      background: #0e2238;
-      border-left: 6px solid #ffcc00;
-      border-radius: 10px;
-      color: #f2f2f2;
-      font-size: 1.05em;
-      line-height: 1.6;
-    }
+        textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            resize: vertical;
+            margin-top: 10px;
+        }
 
-    ::placeholder {
-      color: #cccccc;
-      font-style: italic;
-    }
-  </style>
+        button[type="submit"] {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .response {
+            margin-top: 25px;
+            padding: 20px;
+            background: #eef1ff;
+            border-left: 6px solid var(--primary);
+            border-radius: 8px;
+        }
+
+        .response h2, .response h3 {
+            color: var(--primary);
+            margin-top: 20px;
+        }
+
+        .response ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .response li {
+            margin-bottom: 8px;
+        }
+
+        .response p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        @media screen and (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 10px;
+            }
+
+            .sidebar h2 {
+                display: none;
+            }
+
+            .nav-link {
+                flex: 1;
+                font-size: 14px;
+                padding: 10px;
+                text-align: center;
+            }
+
+            .content {
+                width: 100%;
+                border-radius: 0;
+                box-shadow: none;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Ask Mr Muza</h1>
-    <form method="post">
-      <label for="message">Type your question:</label>
-      <textarea name="message" id="message" rows="4" placeholder="E.g., What were the causes of the Mfecane?"></textarea>
-      <button type="submit">Ask Mr Muza</button>
+    <!-- Sidebar Navigation -->
+    <form class="sidebar" method="post">
+        <h2>Kumba AI</h2>
+        <input type="hidden" name="message" id="autoMessage" value="">
+        <button class="nav-link" name="mode" value="general">General Chat</button>
+        <a class="nav-link" href="https://www.aljazeera.com/where/zimbabwe/" target="_blank">News</a>
+        <a class="nav-link" href="https://jobfinders24.co.za/" target="_blank">Jobs</a>
+        <button class="nav-link" name="mode" value="study">Study Helper</button>
+             <a class="nav-link" href="https://www.newsnow.co.uk/h/World+News/Africa/Zimbabwe" target="_blank">Trending stories</a>
     </form>
 
-    {% if response %}
-      <div class="response">
-        {{ response|safe }}
-      </div>
-    {% endif %}
-  </div>
+    <!-- Main Content -->
+    <div class="content">
+        <h2>Ask Kumba AI</h2>
+        <form method="post">
+            <label for="message">Type your request:</label>
+            <textarea name="message" rows="4" placeholder="write here , add language eg Shona or ndebele if you do not want English..."></textarea>
+            <button type="submit">Send</button>
+            <input type="hidden" name="mode" value="general">
+        </form>
+
+        {% if response %}
+        <div class="response">
+            {{ response|safe }}
+        </div>
+        {% endif %}
+    </div>
 </body>
 </html>
