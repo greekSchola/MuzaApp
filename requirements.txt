@@ -7,6 +7,3 @@ PyMuPDF==1.21.1
 xhtml2pdf==0.2.8
 reportlab==3.6.12
 Werkzeug==2.3.7
-fpdf==2.7.8
-
-
